@@ -1,0 +1,203 @@
+<!DOCTYPE HTML>
+
+<html id="htmld" style="height: 100%;">
+
+<head>
+	<title>RAZAVI AGRI</title>
+	<link rel="stylesheet" href="css/general.css" media="all" />
+	<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+
+	<script type="text/javascript" src="js/jquery.fitvids.js"></script>
+	<script type="text/javascript" src="js/jquery.easing.1.3.js"></script>
+	<script type="text/javascript" src="js/jquery.bxslider.min.js"></script>
+
+	<script type="text/javascript" src="js/general.js"></script>
+	<link href='css/font-awesome.min.css' rel='stylesheet'>
+	<link href='style.css' rel='stylesheet'>
+
+	<style type='text/css'>@import url('fonts/aaa.css');</style>
+	<script type='text/javascript' src='js/ul.js'></script>
+	<script type="text/javascript" src="js/parsePersian.js"></script> 
+	<meta charset='UTF-8'> 
+
+	<style>
+		.pages
+		{
+			height:100%;
+			width:100%;
+			border:none;
+		}
+	</style>
+</head>
+
+
+
+<body style="height: 100%;">
+<div id="all" style="height: 100%;"> 
+    <svg class="menuRight" onclick="Nav_OnClick()" xmlns="http://www.w3.org/2000/svg" version="1" viewBox="0 0 24 24" enable-background="new 0 0 24 24"><path style="text-indent:0;text-align:start;line-height:normal;text-transform:none;block-progression:tb;-inkscape-font-specification:Bitstream Vera Sans" d="M 2 5 L 2 7 L 22 7 L 22 5 L 2 5 z M 2 11 L 2 13 L 22 13 L 22 11 L 2 11 z M 2 17 L 2 19 L 22 19 L 22 17 L 2 17 z" color="#000" overflow="visible" enable-background="accumulate" font-family="Bitstream Vera Sans"></path></svg>
+    <div id="topBar" >
+        <img src="images/head_01.png" alt="" id="bgX"  style="height: 100%;"/>
+        <a href="#" id="logo" ><img src="images/logo.png" alt=""  style="height: 100%;"/> </a>
+    </div>
+	<div class="RouteTop">اخبار</div>
+	 
+    <div class="mbody scrollA"> 
+        <br><br>
+		<div class="txtMsg"></div>
+        <br>
+		<div class="ListRadio">
+			
+		</div>
+
+		<br> 
+		<div style="width:100%">
+			<div class="innerBtn">
+			  <button class="innerBtn_btn" onclick="Btn_SaveVoting();">درج<button>
+			</div>
+		</div>
+		 
+		<div style="width:100%">
+			<div class="innerBtn">
+			  <button class="innerBtn_btn" onclick="Btn_ShowVoting(); " style="background-color: rgb(120, 4, 4);">نمایش آمار<button>
+			</div>
+		</div>
+    </div>
+
+</div>
+<div class="upbox" onclick="" >^</div>
+
+<div class="ShowVoting" onclick="ShowVoting_OnClick()" style="display:none;">
+	
+	<div class="list_dval">
+<!-- 		<br>
+		<br>
+		<div class="dval_oa">
+			<div class="dval_o">
+			   <div class="dvalMM">عالی<span class='selectText selectText1'>10%</span></div> 
+			   <div class="dval dval_color1"> </div> 
+			</div>
+		</div>
+		<br>
+
+		<div class="dval_oa">
+			<div class="dval_o">
+			   <div class="dvalMM">خوب<span class='selectText selectText2'>10%</span></div> 
+			   <div class="dval dval_color2"> </div> 
+			</div>
+		</div>
+		<br>
+
+		<div class="dval_oa">
+			<div class="dval_o">
+			   <div class="dvalMM">متوسط<span class='selectText selectText3'>10%</span></div> 
+			   <div class="dval dval_color3"> </div> 
+			</div>
+		</div>
+		<br>
+
+		<div class="dval_oa">
+			<div class="dval_o">
+			   <div class="dvalMM">ضعیف<span class='selectText selectText4'>10%</span></div> 
+			   <div class="dval dval_color4"> </div> 
+			</div>
+		</div>
+		<br> -->
+	</div>
+</div>
+
+<script>
+ 
+
+var jdata=[];
+
+var QueryString=GetQueryString();
+if(!QueryString.pid)QueryString.pid=0;
+
+NavUrl([
+	{name:"صفحه اصلی",url:"index.html#home=1"},
+	{name:"نظر سنجی",url:"rating.html"}
+	]);
+		
+var vot_id=-1;
+ajax(urlsite_nz+"/wservice/?Action=ShowVote",function(v,n){
+    var itr="<input type='radio' class='regular-radio' name='fld_Gender' id='Gender_F0' value='0'><label for='Gender_F0'>_text</label><br>";
+    var its="<div class='dval_oa'> <div class='dval_o'> <div class='dvalMM'>_txt<span class='selectText selectText1'>50%</span></div> <div class='dval dval_colord dval_color1'></div></div></div><br> ";
+    $(".ListRadio").empty();
+    $(".list_dval").empty().append("<br><br>");
+    $(".txtMsg").html("<br>"+v.title);
+	vot_id=v.id;
+
+    for(var i=0;i<v.items.length;i++)
+	{
+		$(".ListRadio").append
+		(
+			itr.replace("0",v.items[i].id).replace("0",v.items[i].id).replace("0",v.items[i].id).replace("0",v.items[i].id)
+			.replace("_text",v.items[i].title)
+		);
+
+		$(".list_dval").append
+		(
+			its.replace("1",i+1).replace("1",i+1).replace("1",i+1).replace("1",i+1)
+			.replace("_txt",v.items[i].title)
+		);
+	}
+
+    
+// 	$(".regular-radio")[~~v.id-1].checked=true;
+
+	ajax(urlsite_nz+"/wservice/?Action=VoteResult&Id=2&usrid=14769",function(v,n){
+		var max=v.settings.itemsCount;
+
+		for(var i=0;i<v.items.length;i++)
+		{
+			var drs=Math.round((v.items[i].value/max)*100);
+			SetDarsad(drs,i+1)
+		}
+	});
+
+});
+
+
+
+function Btn_SaveVoting()
+{
+	var Id=vot_id;
+	var ChoiceId=~~($("input[name='fld_Gender']:checked").val());
+	if(ChoiceId==0){alert("لطفا گذینه مورد نظر را انتخاب نمائید");return;}
+	var usrid=GetDV('id');
+	ajax(urlsite_nz+"/wservice/?Action=SaveVote&Id="+Id+"&ChoiceId="+ChoiceId+"&usrid="+usrid,function(v,n){
+		//alertj(v);
+		alert("تشکر از نظر شما");ShowVoting_OnClick();
+	});
+} 
+
+function SetDarsad(dr,ii)
+{
+   if(dr>100)dr=100;
+   $(".selectText"+ii).text(dr+"% ");
+   if(dr)
+   $(".dval_color"+ii).css("width",dr+"%");
+} 
+
+function Btn_ShowVoting()
+{
+	$(".ShowVoting").css("display","block");
+    // ShowVoting_OnClick();
+}
+
+function ShowVoting_OnClick()
+{
+	var es=$(".ShowVoting").css("display");
+	if(es=="none")
+		$(".ShowVoting").css("display","block");
+	else
+		$(".ShowVoting").css("display","none");
+}
+
+
+</script>
+
+
+</body>
+
+</html>

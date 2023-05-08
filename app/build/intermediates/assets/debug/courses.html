@@ -1,0 +1,211 @@
+<!DOCTYPE HTML>
+
+<html id="htmld" style="height: 100%;">
+
+<head>
+	<title>RAZAVI AGRI</title>
+	<link rel="stylesheet" href="css/general.css" media="all" />
+	<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+
+	<script type="text/javascript" src="js/jquery.fitvids.js"></script>
+	<script type="text/javascript" src="js/jquery.easing.1.3.js"></script>
+	<script type="text/javascript" src="js/jquery.bxslider.min.js"></script>
+
+	<script type="text/javascript" src="js/general.js"></script>
+
+	<link href='css/font-awesome.min.css' rel='stylesheet'>
+	<link href='style.css' rel='stylesheet'>
+
+	<style type='text/css'>@import url('fonts/aaa.css');</style>
+	<script type='text/javascript' src='js/ul.js'></script>
+	<script type="text/javascript" src="js/parsePersian.js"></script> 
+	<meta charset='UTF-8'> 
+
+	<style>
+		.pages
+		{
+			height:100%;
+			width:100%;
+			border:none;
+		}
+	</style>
+</head>
+
+<temp style="display:none;">
+  <div id="SamplePostX" style="display:none;">
+     <a class="postX" onclick ="postX_onclick(idbox)" >
+          <div class="h2">title</div> 
+          <div class="postCon">content</div>
+          <div class="br"></div>
+    </a>
+  </div>
+</temp>
+
+<body style="height: 100%;">
+<div id="all" style="height: 100%;"> 
+    <svg class="menuRight" onclick="Nav_OnClick()" xmlns="http://www.w3.org/2000/svg" version="1" viewBox="0 0 24 24" enable-background="new 0 0 24 24"><path style="text-indent:0;text-align:start;line-height:normal;text-transform:none;block-progression:tb;-inkscape-font-specification:Bitstream Vera Sans" d="M 2 5 L 2 7 L 22 7 L 22 5 L 2 5 z M 2 11 L 2 13 L 22 13 L 22 11 L 2 11 z M 2 17 L 2 19 L 22 19 L 22 17 L 2 17 z" color="#000" overflow="visible" enable-background="accumulate" font-family="Bitstream Vera Sans"></path></svg>
+    <div id="topBar" >
+        <img src="images/head_01.png" alt="" id="bgX"  style="height: 100%;"/>
+        <a href="#" id="logo" ><img src="images/logo.png" alt=""  style="height: 100%;"/> </a>
+    </div>
+	<div class="RouteTop">اخبار</div>
+	 
+    <div class="mbody scrollA">  
+		<div class="contentposts"></div>
+<!-- 		<div id="loader" style="display: none;"></div> -->
+    </div>
+</div>
+<div class="upbox" onclick="">^</div>
+
+<script>
+var staticList=([
+{items:
+[ 
+{name:'اخبار شهرستان ها',id:75},
+{name:'اخبار اجتماعی',id:77},
+{name:'اخبار همایشها',id:137},
+{name:'آیا میدانید',id:140},
+{name:'آموزش ادواری',id:148}
+]
+},
+{items:
+[
+{name:' ',id:00}
+]
+}
+]);
+
+var jdata=[];
+$(".List_items").append("");
+var QueryString=GetQueryString();
+ 
+
+var frmRec=0;
+$(".contentposts").empty().append("<br><br><br><div style='text-align: center; color:rgb(63, 120, 4);'><h2>لطفا صبر کنید</h2></div>");
+
+if(QueryString.search)
+{
+	var urlGet=urlsite_nz+"/wservice/"+decodeURIComponent(QueryString.search);
+	LoadGetJson(urlGet,getList);
+}
+else
+{
+	var urlGet=urlsite_nz+"/wservice/"+"?Action=GetCourses";//+QueryString.cat;
+	LoadGetJson(urlGet,getList);
+}
+
+NavUrl([
+		{name:"صفحه اصلی",url:"index.html#home=1"},
+		{name:"ثبت نام دوره های آموزشی",url:"courses.html"}
+		]); 
+
+ 
+
+var DisableShowLoader=0;
+var public_v_items=[];
+
+function getList(v,n,d)
+{
+	if(!v){ 
+		if(DisableShowLoader==0) 
+		   $("#loader").fadeToggle("slow"); 
+		return;
+	}
+
+	if(!v.items)
+	{
+		if(($("#loader").css("display")!="block")) 
+		     $("#loader").fadeToggle("slow");
+
+		alert("فاقد مطالب");
+		return;
+	}
+	public_v_items=v.items;
+	var TextIsArchive="<span class='archNews'>ﺁﺭﺷﯿﻮ ﺷﺪﻩ</span>";
+	if(DisableShowLoader==0)  
+	    $("#loader").fadeIn("slow");
+    
+	var listTag="";
+	var srctag=$("#SamplePostX").html();
+	$(".contentposts").empty().append("<br><br>");
+
+	for(var i=0;i<v.items.length;i++)
+	{ 
+		var icon=(v.items[i].icon)? v.items[i].icon:"";
+        var IsArchive="";
+        
+        if(v.items[i].isArchive=="1")
+        	IsArchive=TextIsArchive;
+
+        var id=v.items[i].id;
+
+        if(QueryString.refahi) 
+           id = "'" + v.items[i].catId + "," + v.items[i].id+"'";
+
+        var content= 
+        "<div class='pphadnesab'> <span class='hadnesab'>شهریه: </span>" + IsArchive+v.items[i].price+"</div>"+
+        "<div class='pphadnesab'> <span class='hadnesab'>زمان برگزاری: </span>" + IsArchive+v.items[i].startTime+"</div>"+
+        "<div class='pphadnesab'> <span class='hadnesab'>مدت: </span>" + IsArchive+v.items[i].hour+"</div>"+
+		"<div class='pphadnesab'> <span class='hadnesab'>حدنصاب تشکیل: </span>" + IsArchive+v.items[i].minCapacity+"</div>";
+
+        if(IsArchive+v.items[i].teacher!="")
+           content+="<div class='pphadnesab'> <span class='hadnesab'>استاد دوره: </span>" + IsArchive+v.items[i].teacher+"</div>";
+           
+        if(IsArchive+v.items[i].desc!="")
+			content+="<div class='pphadnesab'> <span class='hadnesab'>توضیحات: </span>" +IsArchive+v.items[i].desc+"</div>";
+		
+		var alreadyTaken="";
+		if(v.items[i].alreadyTaken=="1")alreadyTaken="<span style='color:red;'>(قبلا ثت نام کرده اید)</span>";
+		listTag+=srctag
+		.replace("title",ppt(IsArchive+v.items[i].title+alreadyTaken))
+		.replace("content",ppt(content))
+		.replace("idbox",id)
+		.replace("images/news.jpg",icon);
+	}
+	
+	$(".contentposts").append(listTag);
+	frmRec+=10;
+
+	if(DisableShowLoader==0)  
+	   $("#loader").fadeToggle("slow");
+
+    DisableShowLoader=0;
+}
+
+function postX_onclick(idbox)
+{  
+   var UserId=GetDV("id");
+   OpenBrowser("http://www.i-desk.ir/MobilePage/Mobile_onlinepayment.aspx?c="+idbox+"&UserId="+UserId);
+   return;
+}
+
+//getList();
+
+ScrollDown(".mbody",function(){
+  //getList();
+});
+
+$('.upbox').click(function () {
+	$('.mbody').animate({
+		scrollTop: 0
+	}, 800);
+	
+	$('.upbox').animate({
+		opacity: "1"
+	}, 800); 
+	return false;
+});
+
+
+$(window).on('resize', function(){
+  //var win = $(this); //this = window
+  $(".mainSlide li").css({"width":"100%"});
+});
+
+function Nav_OnClick(){
+	JSInterface.OpenNav();
+} 
+</script>
+</body>
+
+</html>
